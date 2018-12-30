@@ -1,4 +1,7 @@
 BackUp
+.vscode
+test.cpp
+
 *.exe
 *.o
 *.sh
