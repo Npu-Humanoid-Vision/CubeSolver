@@ -1,10 +1,14 @@
 #ifndef KMEANS_H
 #define KMEANS_H
 
-#include <opencv2/opencv.hpp>
-#include <bits/stdc++.h>
-using namespace std;
+#include "./Father.h"
 
+class KmeansProc : public FatherProc {
+public:
+    KmeansProc() ;
+    ~KmeansProc() ;
+    std::vector<cv::Mat> Image2Mat(std::vector<cv::Mat> images) ;
+};
 
 #undef KMEANS_H
 #endif // KMEANS_H

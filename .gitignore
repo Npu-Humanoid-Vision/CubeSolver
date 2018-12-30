@@ -2,6 +2,10 @@ BackUp
 .vscode
 test.cpp
 
+*.zip
+*.rar
+*.tar
+*.gz
 *.exe
 *.o
 *.sh
