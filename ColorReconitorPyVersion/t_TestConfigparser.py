@@ -14,6 +14,7 @@ if __name__ == "__main__":
 
     config.read("../BackupSource/test.ini")
     config["233"]["244"] = '2'
+    print(config["233"]["255"])
 
     with open("../BackupSource/test.ini", "w") as r:
         config.write(r)
