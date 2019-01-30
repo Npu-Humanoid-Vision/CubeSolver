@@ -2,12 +2,6 @@
 Author: Alex Beng
 Date: 2019.01.29->
 '''
-# 透视变换角点顺序
-# p_0------p_1
-# |         |
-# |         |
-# |         |
-# p_2------p_3
 
 # 采样 rect 顺序
 # rect_0---rect_1---rect_2
@@ -18,6 +12,7 @@ Date: 2019.01.29->
 # |          |        |
 # rect_6---rect_7---rect_8
 
+import numpy as np
 import cv2
 import configparser
 
@@ -42,27 +37,16 @@ class Pretreat:
     # params related
     # store & read can be done by the module :-)
     def SetParams(self, params):
-        # set the trans' points
-        self.ul_p0 = (params['up_left']['x_0'], params['up_left']['y_0'])
-        self.ul_p1 = (params['up_left']['x_1'], params['up_left']['y_1'])
-        self.ul_p2 = (params['up_left']['x_2'], params['up_left']['y_2'])
-        self.ul_p3 = (params['up_left']['x_3'], params['up_left']['y_3'])
-
-        self.ur_p0 = (params['up_right']['x_0'], params['up_right']['y_0'])
-        self.ur_p1 = (params['up_right']['x_1'], params['up_right']['y_1'])
-        self.ur_p2 = (params['up_right']['x_2'], params['up_right']['y_2'])
-        self.ur_p3 = (params['up_right']['x_3'], params['up_right']['y_3'])
-
-        self.dl_p0 = (params['down_left']['x_0'], params['down_left']['y_0'])
-        self.dl_p1 = (params['down_left']['x_1'], params['down_left']['y_1'])
-        self.dl_p2 = (params['down_left']['x_2'], params['down_left']['y_2'])
-        self.dl_p3 = (params['down_left']['x_3'], params['down_left']['y_3'])
-
-        self.dr_p0 = (params['down_right']['x_0'], params['down_right']['y_0'])
-        self.dr_p1 = (params['down_right']['x_1'], params['down_right']['y_1'])
-        self.dr_p2 = (params['down_right']['x_2'], params['down_right']['y_2'])
-        self.dr_p3 = (params['down_right']['x_3'], params['down_right']['y_3'])
-
+        # set the trans'matrix
+        self.trans_mat_ul = np.eye(3)
+        self.trans_mat_ur = np.eye(3)
+        self.trans_mat_dl = np.eye(3)
+        self.trans_mat_dr = np.eye(3)
+        for i in range(9):
+            self.trans_mat_ul[i/3][i%3] = params['trans_mat_ul']['element_%d'%i]
+            self.trans_mat_ur[i/3][i%3] = params['trans_mat_ur']['element_%d'%i]
+            self.trans_mat_dl[i/3][i%3] = params['trans_mat_dl']['element_%d'%i]
+            self.trans_mat_dr[i/3][i%3] = params['trans_mat_dr']['element_%d'%i]
         # set the rects
         self.rect_0_point_0 = (params['rect_0']['x_0'], params['rect_0']['y_0'])
         self.rect_0_point_1 = (params['rect_0']['x_1'], params['rect_0']['y_1'])
