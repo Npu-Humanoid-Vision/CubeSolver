@@ -26,11 +26,23 @@ class Pretreat:
     
     def CutImage(self):
         # do 透视变换
-        # resize
+        # self.perspectived_imgs = []
+        # for i in range()
+        # self.perspectived_ul = cv2.warpPerspective(self.raw_four_images[0], self.trans_mat_ul, (self.perspectived_widht, self.perspectived_widht))
+        # self.perspectived_ur = cv2.warpPerspective(self.raw_four_images[0], self.trans_mat_ur, (self.perspectived_widht, self.perspectived_widht))
+        # self.perspectived_dl = cv2.warpPerspective(self.raw_four_images[1], self.trans_mat_dl, (self.perspectived_widht, self.perspectived_widht))
+        # self.perspectived_dr = cv2.warpPerspective(self.raw_four_images[1], self.trans_mat_dr, (self.perspectived_widht, self.perspectived_widht))
+        # self.perspectived_truned_ur = cv2.warpPerspective(self.raw_four_images[2], self.trans_mat_ur, (self.perspectived_widht, self.perspectived_widht))
+        # self.perspectived_truned_dl = cv2.warpPerspective(self.raw_four_images[3], self.trans_mat_dl, (self.perspectived_widht, self.perspectived_widht))
         return 
     
     def GetSampleRectAvg(self):
         # sum the scalar and get avg
+        self.sample_rects = []
+        for i in range(9):
+            row_idx = i/3
+            col_idx = i%3
+
         # return them
         return 
 
@@ -38,52 +50,26 @@ class Pretreat:
     # store & read can be done by the module :-)
     def SetParams(self, params):
         # set the trans'matrix
-        self.trans_mat_ul = np.eye(3)
-        self.trans_mat_ur = np.eye(3)
-        self.trans_mat_dl = np.eye(3)
-        self.trans_mat_dr = np.eye(3)
-        for i in range(9):
-            key = 'element_' + str(i)
-            self.trans_mat_ul[int(i/3)][int(i%3)] = float(params['tran_mat_ul'][key])
-            self.trans_mat_ur[int(i/3)][int(i%3)] = float(params['tran_mat_ur'][key])
-            self.trans_mat_dl[int(i/3)][int(i%3)] = float(params['tran_mat_dl'][key])
-            self.trans_mat_dr[int(i/3)][int(i%3)] = float(params['tran_mat_dr'][key])
-        # set the rects
-        self.rect_0_point_0 = (params['rect_0']['x_0'], params['rect_0']['y_0'])
-        self.rect_0_point_1 = (params['rect_0']['x_1'], params['rect_0']['y_1'])
+        self.trans_mats = []
+        for i in range(4):
+            self.trans_mats.append(np.eye(3))
+            section = 'tran_mat_' + str(i)
+            for j in range(9):
+                key = 'element_' + str(j)
+                self.trans_mats[i][int(j/3)][int(j%3)] = float(params[section][key])
 
-        self.rect_1_point_0 = (params['rect_1']['x_0'], params['rect_1']['y_0'])
-        self.rect_1_point_1 = (params['rect_1']['x_1'], params['rect_1']['y_1'])
-
-        self.rect_2_point_0 = (params['rect_2']['x_0'], params['rect_2']['y_0'])
-        self.rect_2_point_1 = (params['rect_2']['x_1'], params['rect_2']['y_1'])
-
-        self.rect_3_point_0 = (params['rect_3']['x_0'], params['rect_3']['y_0'])
-        self.rect_3_point_1 = (params['rect_3']['x_1'], params['rect_3']['y_1'])
-
-        self.rect_4_point_0 = (params['rect_4']['x_0'], params['rect_4']['y_0'])
-        self.rect_4_point_1 = (params['rect_4']['x_1'], params['rect_4']['y_1'])
-
-        self.rect_5_point_0 = (params['rect_5']['x_0'], params['rect_5']['y_0'])
-        self.rect_5_point_1 = (params['rect_5']['x_1'], params['rect_5']['y_1'])
-
-        self.rect_6_point_0 = (params['rect_6']['x_0'], params['rect_6']['y_0'])
-        self.rect_6_point_1 = (params['rect_6']['x_1'], params['rect_6']['y_1'])
-
-        self.rect_7_point_0 = (params['rect_7']['x_0'], params['rect_7']['y_0'])
-        self.rect_7_point_1 = (params['rect_7']['x_1'], params['rect_7']['y_1'])
-
-        self.rect_8_point_0 = (params['rect_8']['x_0'], params['rect_8']['y_0'])
-        self.rect_8_point_1 = (params['rect_8']['x_1'], params['rect_8']['y_1'])
+        # set perspectived size
+        self.perspectived_widht  = params['perspectived_size']['width']
         return 
 
 if __name__ == "__main__":
+    # test set params
     config = configparser.ConfigParser()
     config.read("../BackupSource/pretreat_config.ini")
     print(config.sections())
     _ = 0
     t_233 = Pretreat(_, config)
-    print(t_233.trans_mat_ul)
-    print(t_233.trans_mat_ur)
-    print(t_233.trans_mat_dl)
-    print(t_233.trans_mat_dr)
+    print(t_233.trans_mats[0])
+    print(t_233.trans_mats[1])
+    print(t_233.trans_mats[2])
+    print(t_233.trans_mats[3])
