@@ -2,12 +2,11 @@ import cv2
 import numpy
 
 class Img2Status:
-    def __init__(self, images, up_anchor_points, down_anchor_points):
-        self.images             = images
-        self.up_anchor_points   = up_anchor_points
-        self.down_anchor_points = down_anchor_points
+    def __init__(self, scalars):
+        self.scalars = scalars 
         return 
-    def seg_image(image)
+    def classify(self):
+        return 
 
 if __name__ == "__main__":
     num = 0

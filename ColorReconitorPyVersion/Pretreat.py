@@ -26,23 +26,45 @@ class Pretreat:
     
     def CutImage(self):
         # do 透视变换
-        # self.perspectived_imgs = []
-        # for i in range()
-        # self.perspectived_ul = cv2.warpPerspective(self.raw_four_images[0], self.trans_mat_ul, (self.perspectived_widht, self.perspectived_widht))
-        # self.perspectived_ur = cv2.warpPerspective(self.raw_four_images[0], self.trans_mat_ur, (self.perspectived_widht, self.perspectived_widht))
-        # self.perspectived_dl = cv2.warpPerspective(self.raw_four_images[1], self.trans_mat_dl, (self.perspectived_widht, self.perspectived_widht))
-        # self.perspectived_dr = cv2.warpPerspective(self.raw_four_images[1], self.trans_mat_dr, (self.perspectived_widht, self.perspectived_widht))
-        # self.perspectived_truned_ur = cv2.warpPerspective(self.raw_four_images[2], self.trans_mat_ur, (self.perspectived_widht, self.perspectived_widht))
-        # self.perspectived_truned_dl = cv2.warpPerspective(self.raw_four_images[3], self.trans_mat_dl, (self.perspectived_widht, self.perspectived_widht))
+        self.perspectived_imgs = []
+        for i in range(4):# 后两张要特别处理
+            if i < 2:
+                t_idx = 0
+            else:
+                t_idx = 1
+            self.perspectived_imgs.append(
+                cv2.warpPerspective(self.raw_four_images[t_idx],
+                                    self.trans_mats[i],
+                                    (self.perspectived_width, self.perspectived_width)
+                )
+            )
+        self.perspectived_imgs.append(
+            cv2.warpPerspective(self.raw_four_images[2],
+                                self.trans_mats[1],
+                                (self.perspectived_width, self.perspectived_width)
+            )
+        )
+        self.perspectived_imgs.append(
+            cv2.warpPerspective(self.raw_four_images[3],
+                                self.trans_mats[2],
+                                (self.perspectived_width, self.perspectived_width)
+            )
+        )
         return 
     
     def GetSampleRectAvg(self):
         # sum the scalar and get avg
-        self.sample_rects = []
-        for i in range(9):
-            row_idx = i/3
-            col_idx = i%3
-
+        self.sample_scalars = [] 
+        for j in range(6):
+            for i in range(9):
+                t_sum = np.ndarray([3,], dtype='float64')
+                rect_cols = 100*(i/3) + 40
+                rect_rows = 100*(i%3) + 40
+                for row_i in range(20):
+                    for col_i in range(20):
+                        t_sum += self.perspectived_imgs[j][rect_rows+row_i, rect_cols+col_i]
+                t_sum /= 400
+                self.sample_scalars.append(t_sum)
         # return them
         return 
 
@@ -59,17 +81,27 @@ class Pretreat:
                 self.trans_mats[i][int(j/3)][int(j%3)] = float(params[section][key])
 
         # set perspectived size
-        self.perspectived_widht  = params['perspectived_size']['width']
+        self.perspectived_width = params['perspectived_size']['width']
         return 
 
 if __name__ == "__main__":
     # test set params
     config = configparser.ConfigParser()
     config.read("../BackupSource/pretreat_config.ini")
-    print(config.sections())
-    _ = 0
+
+    # import glob
+    # pic_path = "D:\\AlexBeng\\CubeSolver\\BackupSource\\*.jpg"
+    # pic_paths = [i for i in glob.glob(pic_path)]
+    # pics = []
+    # for i in pic_paths:
+    #     pics.append(cv2.imread(i))
+    _ = []
     t_233 = Pretreat(_, config)
     print(t_233.trans_mats[0])
     print(t_233.trans_mats[1])
     print(t_233.trans_mats[2])
     print(t_233.trans_mats[3])
+    t_233.CutImage()
+    for i in range(6):
+        cv2.imshow("233", t_233.perspectived_imgs[i])
+        cv2.waitKey()
