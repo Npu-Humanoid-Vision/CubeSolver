@@ -43,10 +43,11 @@ class Pretreat:
         self.trans_mat_dl = np.eye(3)
         self.trans_mat_dr = np.eye(3)
         for i in range(9):
-            self.trans_mat_ul[i/3][i%3] = params['trans_mat_ul']['element_%d'%i]
-            self.trans_mat_ur[i/3][i%3] = params['trans_mat_ur']['element_%d'%i]
-            self.trans_mat_dl[i/3][i%3] = params['trans_mat_dl']['element_%d'%i]
-            self.trans_mat_dr[i/3][i%3] = params['trans_mat_dr']['element_%d'%i]
+            key = 'element_' + str(i)
+            self.trans_mat_ul[int(i/3)][int(i%3)] = float(params['tran_mat_ul'][key])
+            self.trans_mat_ur[int(i/3)][int(i%3)] = float(params['tran_mat_ur'][key])
+            self.trans_mat_dl[int(i/3)][int(i%3)] = float(params['tran_mat_dl'][key])
+            self.trans_mat_dr[int(i/3)][int(i%3)] = float(params['tran_mat_dr'][key])
         # set the rects
         self.rect_0_point_0 = (params['rect_0']['x_0'], params['rect_0']['y_0'])
         self.rect_0_point_1 = (params['rect_0']['x_1'], params['rect_0']['y_1'])
@@ -77,4 +78,12 @@ class Pretreat:
         return 
 
 if __name__ == "__main__":
-     
+    config = configparser.ConfigParser()
+    config.read("../BackupSource/pretreat_config.ini")
+    print(config.sections())
+    _ = 0
+    t_233 = Pretreat(_, config)
+    print(t_233.trans_mat_ul)
+    print(t_233.trans_mat_ur)
+    print(t_233.trans_mat_dl)
+    print(t_233.trans_mat_dr)
