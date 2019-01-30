@@ -1,12 +1,15 @@
 import cv2
-import numpy
+import numpy as np
+from sklearn.cluster import KMeans
 
 class Img2Status:
     def __init__(self, scalars):
         self.scalars = scalars 
         return 
-    def classify(self):
-        return 
+    def cluster(self):
+        kmeans_cluster = KMeans(n_clusters=6)
+        kmeans_cluster.fit(self.scalars)
+        return kmeans_cluster.labels_
 
 if __name__ == "__main__":
     num = 0
