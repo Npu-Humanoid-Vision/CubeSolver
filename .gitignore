@@ -12,3 +12,5 @@ test.cpp
 *.jpg
 *.png
 *.gif
+
+__pycache__
