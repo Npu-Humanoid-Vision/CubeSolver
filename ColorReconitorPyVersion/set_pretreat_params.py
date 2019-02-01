@@ -1,4 +1,7 @@
-from Pretreat import *
+import numpy as np
+import cv2
+import configparser
+
 
 current_point_counter = -1
 colors = [(0, 0, 255), (0, 255, 0), (255, 255, 0), (255, 0, 0)]
@@ -6,6 +9,7 @@ radius = [0, 0, 0, 0]
 points = []
 
 frame = None
+M = None
 
 def MouseHandler(event, x, y, flags, param):
     global current_point_counter
@@ -47,5 +51,12 @@ if __name__ == "__main__":
         if key == ord('q'): 
             break
         elif key-ord('1') <= 3 and key != -1:
-            print(key - ord('1'))
-    # gabage = Pretreat()
+            config = configparser.ConfigParser()
+            config.read("../BackupSource/pretreat_config.ini")
+            print(config.sections())
+            section = 'tran_mat_%d'%(key-ord('1'))
+            for i in range(9):
+                config[section]['element_%d'%i] = str(M[int(i/3), int(i%3)])
+            with open("../BackupSource/pretreat_config.ini", "w") as r:
+                config.write(r)
+            # print(key - ord('1'))
