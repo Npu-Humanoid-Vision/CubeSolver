@@ -22,6 +22,7 @@ class Pretreat:
     def __init__(self, raw_four_images, config):
         self.raw_four_images = raw_four_images  # raw images
         self.SetParams(config)      # get points from config objuect
+
         return 
     
     def CutImage(self):
@@ -58,7 +59,7 @@ class Pretreat:
         for j in range(6):
             for i in range(9):
                 t_sum = np.ndarray([3,], dtype='float64')
-                rect_cols = 100*(i/3) + 40
+                rect_cols = 100*(i//3) + 40
                 rect_rows = 100*(i%3) + 40
                 for row_i in range(20):
                     for col_i in range(20):
@@ -81,7 +82,7 @@ class Pretreat:
                 self.trans_mats[i][int(j/3)][int(j%3)] = float(params[section][key])
 
         # set perspectived size
-        self.perspectived_width = params['perspectived_size']['width']
+        self.perspectived_width = int(params['perspectived_size']['width'])
         return 
 
 if __name__ == "__main__":

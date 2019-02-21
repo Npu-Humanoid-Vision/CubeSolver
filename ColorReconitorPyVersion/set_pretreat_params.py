@@ -59,4 +59,6 @@ if __name__ == "__main__":
                 config[section]['element_%d'%i] = str(M[int(i/3), int(i%3)])
             with open("../BackupSource/pretreat_config.ini", "w") as r:
                 config.write(r)
-            # print(key - ord('1'))
+        # collect images
+        elif key-ord('1') >= 4 and key-ord('1') <=8:
+            cv2.imwrite("../BackupSource/%d.jpg"%(key-ord('1')), frame)
