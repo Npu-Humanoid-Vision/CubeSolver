@@ -14,3 +14,5 @@ test.cpp
 *.gif
 
 __pycache__
+*.pyc
+*.ini
