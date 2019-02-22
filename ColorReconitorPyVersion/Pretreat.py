@@ -24,7 +24,13 @@ class Pretreat:
         self.SetParams(config)      # get points from config objuect
 
         return 
-    
+        # self.CutImage()
+        # self.GetSampleRectAvg()
+
+        # return self.sample_scalars
+    def DoPreproc(self):
+        for i in self.raw_four_images:
+            i = cv2.GaussianBlur(i, (51, 51), 0)
     def CutImage(self):
         # do 透视变换
         self.perspectived_imgs = []
@@ -51,6 +57,8 @@ class Pretreat:
                                 (self.perspectived_width, self.perspectived_width)
             )
         )
+        # 改顺序
+        self.perspectived_imgs[2], self.perspectived_imgs[4] = self.perspectived_imgs[4], self.perspectived_imgs[2]
         return 
     
     def GetSampleRectAvg(self):
@@ -59,12 +67,12 @@ class Pretreat:
         for j in range(6):
             for i in range(9):
                 t_sum = np.ndarray([3,], dtype='float64')
-                rect_cols = 100*(i//3) + 40
-                rect_rows = 100*(i%3) + 40
-                for row_i in range(20):
-                    for col_i in range(20):
+                rect_cols = 100*(i//3) + 45
+                rect_rows = 100*(i%3) + 45
+                for row_i in range(10):
+                    for col_i in range(10):
                         t_sum += self.perspectived_imgs[j][rect_rows+row_i, rect_cols+col_i]
-                t_sum /= 400
+                t_sum /= 100
                 self.sample_scalars.append(t_sum)
         # return them
         return 
